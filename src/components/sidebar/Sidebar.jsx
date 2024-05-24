@@ -1,23 +1,37 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {assets} from '../../assets/assets'
 import './sidebar.css'
+import { Context } from '../../context/Context';
 const Sidebar = () => {
   const [expand,setExpand] = useState(false);
+
+  const {onSent,prevPrompts,setRecentPrompt,newChat} = useContext(Context);
+
+  const loadPrompt = async (prompt) => {
+    setRecentPrompt(prompt);
+    await onSent(prompt);
+  }
+
   return (
     <div className='sidebar'>
        <div className="top">
        <img src={assets.menu_icon} alt="" draggable={false} className='w-7 mt-5 mx-7 cursor-pointer rounded-full' onClick={() => setExpand(prev=>!prev)}/>
        
-       <div className="new-chat mx-4 inline-flex gap-5 mt-10 bg-gray-200 p-3 rounded-full hover:bg-gray-300 cursor-pointer">
+       <div onClick={()=>newChat()} className="new-chat mx-4 inline-flex gap-5 mt-10 bg-gray-200 p-3 rounded-full hover:bg-gray-300 cursor-pointer">
         <img src={assets.plus_icon} alt="" draggable={false} />
         {expand?<p>New Chat</p>:null}
        </div>
-       {expand?<div className="recent mt-8 p-1">
+       {expand?<div className="recent mt-8 p-1 flex flex-col">
         <p className='font-bold mb-4 ml-2'>Recent</p>
-        <div className="recent-chat inline-flex gap-2 ml-1 rounded-full hover:bg-gray-300 cursor-pointer p-3">
+        {prevPrompts.map((item,index)=>{
+          return(
+            <div onClick={()=>loadPrompt(item)} className="recent-chat inline-flex gap-2 ml-1 rounded-full hover:bg-gray-300 cursor-pointer p-3">
         <img src={assets.message_icon} alt="" draggable={false} />
-        <p>What is React..</p>
+        <p>{item.slice(0,18)}..</p>
         </div>
+          )
+        })}
+        
        </div>:null}
         </div> 
         <div className="bottom flex flex-col mb-6">
