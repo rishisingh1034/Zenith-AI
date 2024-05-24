@@ -52,7 +52,9 @@ const Main = () => {
         
         <div className="prompt left-[22rem] absolute bottom-0 w-[100%] max-w-[900px] py-[10px] m-auto">
             <div className="search flex justify-between gap=[2px] bg-[#f0f4f9] py-3 rounded-full">
-            <input type="text" onChange={(e)=>setInput(e.target.value)} value={input} placeholder='Enter the Prompt here' className='bg-transparent outline-none flex-1 ml-7' />
+            <input type="text" onChange={(e)=>setInput(e.target.value)} value={input} placeholder='Enter the Prompt here' className='bg-transparent outline-none flex-1 ml-7' onKeyDown={(e) => {
+              e.keyCode === 13 && e.shiftKey === false && onSent();
+            }}/>
             <div className='flex p-2 gap-4'>
                 <img src={assets.gallery_icon} alt="" className='cursor-pointer' draggable={false} />
                 <img src={assets.mic_icon} alt=""  className='cursor-pointer' draggable={false}/>
